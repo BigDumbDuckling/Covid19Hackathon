@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>COVID-19</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style.css" title="style" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="index.html">COVID-19<span class="logo_colour"> Information</span></a></h1>
+          <h2>~ all the information about the coronavirus in one place ~</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Home</a></li>
+          <li class="selected"><a href="examples.html">Self-Checker</a></li>
+          <li><a href="page.html">News Updates</a></li>
+          <li><a href="another_page.html">Search Engine</a></li>
+          <li><a href="contact.html">Care Centers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="content_header"></div>
+    <div id="site_content">
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>COVID-19 Self-Checker</h1>
+        <p>This survey will only take a couple of minutes! You'll be asked a series of questions, and you just have to select 'Yes' or 'No' depending on how you feel.</p>
+        <p>At the end, this program will come to a conclusion on what you may be going through, and it will give you suggestions on how to approach the matter. This information will be directly from the CDC!</p>
+		<script>
+	var hasCough = false;
+	var hasPhlegm = false;
+	var hasDryCough = false;
+	var hasFever = false;
+	var hasShortBreath = false;
+	var hasSevereBreath = false;
+	var hasLightBreath = false;
+	var atRisk = false;
+	
+	var sympCounter = 0;
+	
+	function first()
+	{
+		var msg = "";
+		msg += "Do take your time!"
+		
+		idWelcome.innerHTML = msg;
+		idButton.value = "Begin";
+		document.getElementById("idButton").setAttribute('onClick','questionOne()');
+	}
+	
+	function questionOne()
+	{
+	
+		idWelcome.innerHTML = "";
+		idQuestion.innerHTML = "Do you have a cough?";
+		idSelection.innerHTML = "<select id='idSelect'><option>Yes</option><option>No</option></select> <br/> <br/>";
+		idButton.value = "Next Question";
+		document.getElementById("idButton").setAttribute('onClick','questionOneAnswer()');
+	}
+	
+	function questionOneAnswer()
+	{
+		if(idSelect.value == "Yes")
+		{
+			hasCough = true;
+			whatCough();
+		}
+		else
+		{
+			hasCough = false;
+			questionTwo();
+		}
+	}
+	
+	function whatCough()
+	{
+		idQuestion.innerHTML = "Do you have phlegm or is it a dry cough?";
+		idSelection.innerHTML = "<select id='idSelect'><option>Phlegm</option><option>Dry Cough</option></select> <br/> <br/>"
+		document.getElementById("idButton").setAttribute('onClick','whatCoughAnswer()');
+	}
+	
+	function whatCoughAnswer()
+	{
+		if(idSelect.value == "Dry Cough")
+		{
+			hasDryCough = true;
+			hasPhlegm = false;
+			sympCounter = sympCounter + 1;
+			questionTwo();
+		}
+		else
+		{
+			hasDryCough = false;
+			hasPhlegm = true;
+			questionTwo();
+		}
+	}
+	
+	function questionTwo()
+	{
+		idQuestion.innerHTML = "Do you have a fever?";
+		idSelection.innerHTML = "<select id='idSelect'><option>Yes</option><option>No</option></select> <br/> <br/>";
+		document.getElementById("idButton").setAttribute('onClick','questionTwoAnswer()');
+	}
+	
+	function questionTwoAnswer()
+	{
+		if(idSelect.value == "Yes")
+		{
+			hasFever = true;
+			sympCounter += 1;
+			questionThree();
+		}
+		else
+		{
+			hasFever = false;
+			questionThree();
+		}
+	}
+	
+	function questionThree()
+	{
+		idQuestion.innerHTML = "Do you have shortness of breath?";
+		idSelection.innerHTML = "<select id='idSelect'><option>Yes</option><option>No</option></select> <br/> <br/>";
+		document.getElementById("idButton").setAttribute('onClick','questionThreeAnswer()');
+	}
+	
+	function questionThreeAnswer()
+	{
+		if(idSelect.value == "Yes")
+		{
+			hasShortBreath = true;
+			howSevere();
+		}
+		else
+		{
+			hasShortBreath = false;
+			otherIssues();
+		}
+	}
+	
+	function howSevere()
+	{
+		idQuestion.innerHTML = "Do you feel that this is severe? Are you gasping for air? Or do you feel that this is light shortness of breath?";
+		idSelection.innerHTML = "<select id='idSelect'><option>Severe</option><option>Light</option></select> <br/> <br/>"
+		document.getElementById("idButton").setAttribute('onClick','howSevereAnswer()');
+	}
+	
+	function howSevereAnswer()
+	{
+		if(idSelect.value == "Severe")
+		{
+			hasSevereBreath = true;
+			hasLightBreath = false;
+			sympCounter = sympCounter + 1;
+			otherIssues();
+		}
+		else
+		{
+			hasSevereBreath = false;
+			hasLightBreath = true;
+			otherIssues();
+		}
+	}
+	
+	function otherIssues()
+	{
+		idQuestion.innerHTML = "Do any of the following problems apply to you: HIV, Asthma, Respiratory Diseases, Kidney Problems? Are you 65 years or older? If any of these apply to you, please select 'Yes'!";
+		idSelection.innerHTML = "<select id='idSelect'><option>Yes</option><option>No</option></select> <br/> <br/>"
+		document.getElementById("idButton").setAttribute('onClick','otherIssuesAnswer()');
+	}
+	
+	function otherIssuesAnswer()
+	{
+		if(idSelect.value == "Yes")
+		{
+			atRisk = true;
+			finalQuestion();
+		}
+		else
+		{
+			atRisk = false;
+			finalQuestion();
+		}
+	}
+	
+	function finalQuestion()
+	{
+		idQuestion.innerHTML = "Do you have any another symptoms you'd like to share?";
+		idSelect = "";
+		idSelection.innerHTML = "<input type='text' id='idTextbox' placeholder='Type your answer here'>"
+		idButton.value = "Submit Survey";
+		document.getElementById("idButton").setAttribute('onClick','endSurvey()');
+	}
+	
+	function endSurvey()
+	{
+		idQuestion.innerHTML = "";
+		idSelection.innerHTML = "";
+		if(sympCounter == 3 && atRisk == true)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 3 symptoms of Covid-19, ";
+			msg += "and you may be at risk of having the virus. The CDC would advise you to call your medical provider within 24 hours, ";
+			msg += "because you have other medical conditions that may put you at a greater risk for complications from COVID-19. Also, ";
+			msg += "you should begin home isolation, don't leave unless you're getting medical care. Do not take public transport, and be ";
+			msg += " sure to get care if you feel worse!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else if(sympCounter == 2 && atRisk == true)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 2 symptoms of Covid-19, ";
+			msg += "and you may be at risk of having the virus. The CDC would advise you to call your medical provider within 24 hours, ";
+			msg += "because you have other medical conditions that may put you at a greater risk for complications from COVID-19. Also, ";
+			msg += "you should begin home isolation, don't leave unless you're getting medical care. Do not take public transport, and be ";
+			msg += " sure to get care if you feel worse!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else if(sympCounter == 1 && atRisk == true)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 1 symptom of Covid-19, ";
+			msg += "and you may be at risk of having the virus. The CDC would advise you to call your medical provider within 24 hours, ";
+			msg += "because you have other medical conditions that may put you at a greater risk for complications from COVID-19. Also, ";
+			msg += "you should begin home isolation, don't leave unless you're getting medical care. Do not take public transport, and be ";
+			msg += " sure to get care if you feel worse!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else if(sympCounter == 3 && atRisk == false)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 3 symptoms of Covid-19, ";
+			msg += "and you may be at risk of having the virus. The CDC would advise you to stay home and take rest. Maintain 6 feet of ";
+			msg += "distance from everyone. Stay in home isolation until you are better. Please wash your hands regularly, and have good ";
+			msg += "hygiene. If you seem to be getting worse, please call your health care provider, and carefully follow their instructions!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else if(sympCounter == 2 && atRisk == false)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 2 symptoms of Covid-19, ";
+			msg += "and you may be slightly at risk of having the virus. The CDC would advise you to stay home and take rest. Maintain 6 feet of ";
+			msg += "distance from everyone. Please wash your hands regularly, and maintain good hygiene. If you seem to be getting worse, ";
+			msg += "please call your health care provider, and carefully follow their instructions!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else if(sympCounter == 1 && atRisk == false)
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have 1 symptom of Covid-19, ";
+			msg += "and you most likely don't have the virus. But, the CDC would still advise you to stay home. ";
+			msg += "Please wash your hands regularly, and maintain good hygiene. If you seem to be getting more symptoms, and you feel worse, ";
+			msg += "please call your health care provider, and carefully follow their instructions!";
+			
+			idSelection.innerHTML = msg;
+		}
+		else
+		{
+			var msg = "";
+			msg += "Based on the information you just provided us, we have come to the conclusion that you have no symptoms of Covid-19, ";
+			msg += "and you do not have the virus. This doesn't mean you can do whatever you want. The CDC still advises that you to stay home. ";
+			msg += "Going outside might cause you to contract symptoms that you wouldn't have otherwise gotten if you stayed at home. Continue "; 
+			msg += "to wash your hands regularly, and always maintain good hygiene!"
+			
+			idSelection.innerHTML = msg;
+		}
+		
+		idButton.value = "Reset";
+		document.getElementById("idButton").setAttribute('onClick','last()');
+		
+	}
+	
+	function last()
+	{
+		idSelection.innerHTML = "";
+		idWelcome.innerHTML = "Press 'Next' to begin!";
+		idButton.value = "Next";
+		document.getElementById("idButton").setAttribute('onClick','first()');
+	}
+
+	</script>
+		
+		
+		<div id="idWelcome">Press 'Next' to begin!</div>
+		<br>
+		<div id="idQuestion"></div>
+		<br>
+		<div id="idSelection"></div>
+		<br>
+		<div id="idFinalMsg"></div>
+		<br>
+		<input id = "idButton" type = "button" value = "Next" onClick = "first()">
+		<br>	
+		
+      </div>
+    </div>
+    <div id="content_footer"></div>
+    <div id="footer">
+      Copyright &copy; colour_red | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">Website Templates</a>
+    </div>
+  </div>
+</body>
+</html>
